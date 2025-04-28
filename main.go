@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"html"
 	"io"
 	"log"
 	"math/rand"
@@ -435,7 +436,7 @@ func addTorrentHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	magnet := request.Magnet
+	magnet := html.UnescapeString(request.Magnet)
 	if magnet == "" {
 		respondWithJSON(w, http.StatusBadRequest, map[string]string{"error": "No magnet link provided"})
 	}
