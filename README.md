@@ -59,13 +59,13 @@ This is the recommended method for deployment.
         volumes:
           # Mount the config directory for persistent settings (Optional)
           - ./config:/app/config
-          # Mount the download location of the file (Optional)
+          # Persist torrent data on the host (Optional)
           - ./torrent-data:/app/torrent-data
         restart: unless-stopped
     ```
-    *   **Optional Persistence:** By default, settings (Proxy, Prowlarr/Jackett) are stored inside the container and will be lost if the container is restarted. To make settings persistent across restarts, you can mount a local directory from your host to `/app/config` inside the container using the `volumes` option above. 
+    *   **Optional Persistence:** Settings (Proxy, Prowlarr/Jackett) are stored in the container's writable layer by default. They survive a restart of the same container, but are lost if it is removed or recreated. To persist settings across container replacement, mount a local directory from your host to `/app/config` using the `volumes` option above.
     *   If you choose to mount the directory for persistence, you **must** create the directory on your host machine **before** starting the container for the first time: `mkdir -p ./config`. 
-    *   If you don't mount this volume, the application will still function correctly, but you will need to re-configure your settings after each container restart. Torrent data itself is always ephemeral.
+    *   Without the config mount, settings remain in the container's writable layer and are removed if the container is removed or recreated. The example's `./torrent-data:/app/torrent-data` bind mount persists torrent data on the host. Without it, torrent data is stored in the container and is removed when the container is removed.
 
 2.  **Start the container:**
     ```bash
@@ -81,7 +81,7 @@ Alternatively, you can run the container directly using `docker run`:
     ```bash
     mkdir -p ./config
     ```
-    If you skip this step and the volume mount below, the application will still work, but settings will be lost on restart.
+    If you omit the config bind mount below, settings remain in the container's writable layer and survive restarts of that container, but are lost if it is removed or recreated.
 
 2.  **Run the container:**
     ```bash
