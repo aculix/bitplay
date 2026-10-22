@@ -644,6 +644,7 @@ func addTorrentHandler(w http.ResponseWriter, r *http.Request) {
 	magnet := html.UnescapeString(request.Magnet)
 	if magnet == "" {
 		respondWithJSON(w, http.StatusBadRequest, map[string]string{"error": "No magnet link provided"})
+		return
 	}
 
 	// handle http links like Prowlarr or Jackett
