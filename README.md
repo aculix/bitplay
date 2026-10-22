@@ -88,17 +88,16 @@ Alternatively, you can run the container directly using `docker run`:
     docker run -d \
       --name bitplay \
       -p 3347:3347 \
-      # Add the volume mount below ONLY if you want persistent settings (and created ./config above)
-      -v $(pwd)/config:/app/config \
-      # The location where the downloaded file is saved
-      -v $(pwd)/torrent-data:/app/torrent-data \
+      -v "$(pwd)/config:/app/config" \
+      -v "$(pwd)/torrent-data:/app/torrent-data" \
       --restart unless-stopped \
       ghcr.io/aculix/bitplay:latest
     ```
     *   `-d`: Run in detached mode (background).
     *   `--name bitplay`: Assign a name to the container.
     *   `-p 3347:3347`: Map port 3347 on the host to port 3347 in the container.
-    *   `-v $(pwd)/config:/app/config`: (Optional) Mount the local `./config` directory for persistent settings.
+    *   `-v "$(pwd)/config:/app/config"`: (Optional) Mount the local `./config` directory for persistent settings.
+    *   `-v "$(pwd)/torrent-data:/app/torrent-data"`: (Optional) Mount the local `./torrent-data` directory.
     *   `--restart unless-stopped`: Configure the container to restart automatically unless manually stopped.
     *   `ghcr.io/aculix/bitplay:latest`: The Docker image to use.
 
